@@ -7,9 +7,57 @@ import { Artist } from '../model/Artist.schema';
 import { APIArtist, TrackData, TrackFeatures } from '../model/APIModel';
 import { mongooseConnect } from '../util/MongooseConnector';
 import SongModel from '../model/SongModel';
+import SearchModel from '../model/SearchModel';
+
+const SEARCH_LIMIT = 5;
 
 export default class SpotifyController {
 
+    static async searchSpotify(query: string): Promise<SearchModel[]>{
+        console.log('Searching for : ' + query);
+
+        query = query.trim().replace(' ', '%20');
+
+        const queryString = `q=${query}&type=track&limit=${SEARCH_LIMIT}`;
+
+        let token = ''
+        try {
+            token = await getToken()
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+        
+        let res;
+        try {
+            res = await axios({
+                method: 'get',
+                url: `https://api.spotify.com/v1/search?${queryString}`,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+            });
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+        const tracks: TrackData[] = res.data.tracks.items;
+        // todo possibly add to database if we already have the data
+
+        const result: SearchModel[] = tracks.map(track => {
+            const song: SearchModel = {
+                id: track.id,
+                title: track.name,
+                artist_names: track.artists.map(artist => artist.name),
+                image_url: track.album.images[0].url,
+            }
+            return song;
+        });
+
+        // console.log(res.data);
+        // console.log('\n TRACKS:')
+        // console.log(res.data.tracks.items);
+
+        return result;
+    }
 
     /**
      * Gets the analysis of a song. Returns from database if it exists. Otherwise, fetches info from spotify.
@@ -85,6 +133,7 @@ export default class SpotifyController {
             spotify_id: trackData.id,
             title: trackData.name,
             artists: trackData.artists.map(artist => artist.id),
+            artist_names: trackData.artists.map(artist => artist.name),
             duration_ms: trackData.duration_ms,
 
             date_added: Date.now(),
@@ -113,5 +162,7 @@ export default class SpotifyController {
 
         return newSong;
     }
+
+
 
 }

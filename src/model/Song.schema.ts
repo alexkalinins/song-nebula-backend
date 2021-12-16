@@ -4,6 +4,7 @@ export interface Song{
     spotify_id: string;
     title: string;
     artists: string[];
+    artist_names: string[];
     duration_ms: number;
 
     date_added: number;
@@ -33,6 +34,7 @@ const SongSchema = new Schema({
     spotify_id: {type: String, required: true, unique: true},
     title: {type: String, required: true},
     artists: {type: [String], required: true},
+    artist_names:{type: [String], required: true},
     duration_ms: {type: Number, required: true},
 
     date_added: {type: Number, required: true},
