@@ -21,8 +21,11 @@ export default class SpotifyController {
 
         const songSearch = await SongModel.findOne({ spotify_id: id });
         if (songSearch) {
+            console.log('Song in database');
             return songSearch;
         }
+
+        console.log('Song not found in database');
 
         let token = ''
         try {
