@@ -9,6 +9,7 @@
         "outDir": "dist",
         "baseUrl": "./src",
         "rootDir": "./src",
+        "allowJs": true,
         "paths": {
             "*": [
                 "node_modules/*"

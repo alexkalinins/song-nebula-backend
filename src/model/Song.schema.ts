@@ -10,10 +10,12 @@ export interface Song{
     date_added: number;
 
     image_url: string;
-    preview_url: string;
+    preview_url?: string;
     song_url: string;
 
     album: string;
+
+    cluster?: number;
 
     // analysis
     danceability: number;
@@ -40,10 +42,11 @@ const SongSchema = new Schema({
     date_added: {type: Number, required: true},
 
     image_url: {type: String, required: true},
-    preview_url: {type: String, required: true},
+    preview_url: {type: String, required: false},
     song_url: {type: String, required: true},
 
     album: {type: String, required: true},
+    cluster: {type: Number, required: false},
 
     // analysis
     danceability: {type: Number, required: true},
