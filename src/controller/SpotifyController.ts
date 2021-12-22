@@ -289,6 +289,7 @@ export default class SpotifyController {
             }
 
             const ids = res.data.items.filter((item: { track: { id: any; }; }) => item != null && item.track != null).map((item: { track: { id: any; }; }) => item.track.id)
+            if (!ids) break;
             count += ids.length;
             total = res.data.total;
             console.log(`total songs in playlist: ${total}`);
@@ -309,6 +310,7 @@ export default class SpotifyController {
             'artist_names': 1,
             'image_url': 1,
             'song_url': 1,
+            'preview_url': 1,
             'cluster': 1,
             [axis1]: 1,
             [axis2]: 1,

@@ -1,6 +1,6 @@
 import GMM from 'gaussian-mixture-model'
 import ModelParamModel from '../model/ModelParamModel'
-import {spawn} from 'child_process'
+import { spawn } from 'child_process'
 
 /**
  * A controller for infering clusters
@@ -30,9 +30,9 @@ export default class GMMController {
 
         let cluster = 0;
         let max_prob = 0;
-        
-        model.predictNormalize(point).forEach((prob, i)=>{
-            if(prob > max_prob) {
+
+        model.predictNormalize(point).forEach((prob, i) => {
+            if (prob > max_prob) {
                 max_prob = prob;
                 cluster = i;
             }
@@ -45,20 +45,20 @@ export default class GMMController {
      * Returns GMM model object. If it is not yet loaded, it will be loaded.
      */
     static async _getModel() {
-        if(!GMMController._gmm) {
-            const [means, covariances, weights] = await Promise.all([
-                ModelParamModel.findOne({'type': 'covariances'}).exec(),
-                ModelParamModel.findOne({'type': 'means'}).exec(),
-                ModelParamModel.findOne({'type': 'weights'}).exec()
+        if (!GMMController._gmm) {
+            const [covariances, means, weights] = await Promise.all([
+                ModelParamModel.findOne({ 'param': 'covariances' }).exec(),
+                ModelParamModel.findOne({ 'param': 'means' }).exec(),
+                ModelParamModel.findOne({ 'param': 'weights' }).exec()
             ])
-    
+
             GMMController._gmm = new GMM({
                 means: means.data,
                 covariances: covariances.data,
                 weights: weights.data
             });
         }
-        
+
         return GMMController._gmm;
     }
 
