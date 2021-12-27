@@ -45,8 +45,6 @@ router.get('/nebula/previews', async (req, res) => {
     const axis2 = req.query.axis2;
     const axis3 = req.query.axis3;
 
-    console.log(req.query);
-
     if (!axis1 || !axis2 || !axis3 || typeof (axis1) !== 'string' || typeof (axis2) !== 'string' || typeof (axis3) !== 'string') {
         res.status(400).json({ error: 'Axis parameters are required' });
         return;
@@ -55,15 +53,12 @@ router.get('/nebula/previews', async (req, res) => {
 
     const nebula: NebulaPoint[] = await SpotifyController.getNebula(axis1, axis2, axis3);
 
-    console.log(nebula);
     if (nebula) {
         res.send(nebula);
         return;
     }
 
     res.status(500).json({ error: 'Something went wrong' });
-
-
 })
 
 
