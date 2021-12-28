@@ -10,6 +10,7 @@ import SongModel from '../model/SongModel';
 import SearchModel from '../model/SearchModel';
 import GMMController from './GMMController';
 import NebulaPoint from '../model/NebulaPoint';
+import NebulaCacheController from './NebulaCacheController';
 
 const SEARCH_LIMIT = 5;
 
@@ -304,7 +305,14 @@ export default class SpotifyController {
     }
 
     static async getNebula(axis1: string, axis2: string, axis3: string): Promise<NebulaPoint[]> {
-        const points = await SongModel.find({}, {
+        const cache = await NebulaCacheController.getFromCache(axis1, axis2, axis3);
+        if (cache) {
+            return cache.nebula;
+        }
+
+        console.log('Query not cached')
+
+        let points = await SongModel.find({}, {
             'spotify_id': 1,
             'title': 1,
             'artist_names': 1,
@@ -317,6 +325,23 @@ export default class SpotifyController {
             [axis3]: 1
         }).exec();
 
+        const axes = [axis1, axis2, axis3].sort()
+
+        points = points.map(point => {
+            return {
+                spotify_id: point.spotify_id,
+                title: point.title,
+                artist_names: point.artist_names,
+                image_url: point.image_url,
+                x: point[axes[0]],
+                y: point[axes[1]],
+                z: point[axes[2]],
+                cluster: point.cluster,
+                preview_url: point.preview_url ? point.preview_url : '',
+            }
+        });
+
+        await NebulaCacheController.makeCache(axis1, axis2, axis3, points);
         return points;
     }
 
