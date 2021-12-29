@@ -1,6 +1,7 @@
 import GMM from 'gaussian-mixture-model'
 import ModelParamModel from '../model/ModelParamModel'
 import { spawn } from 'child_process'
+import { mongooseConnect } from '../util/MongooseConnector';
 
 /**
  * A controller for infering clusters
@@ -46,6 +47,7 @@ export default class GMMController {
      */
     static async _getModel() {
         if (!GMMController._gmm) {
+            mongooseConnect()
             const [covariances, means, weights] = await Promise.all([
                 ModelParamModel.findOne({ 'param': 'covariances' }).exec(),
                 ModelParamModel.findOne({ 'param': 'means' }).exec(),
@@ -70,5 +72,13 @@ export default class GMMController {
         // eslint-disable-next-line no-undef
         spawn('python', ['../python/gmm_remodel.py', process.env.MONGODB_URI]);
         return null;
+    }
+
+
+    static async getNumClusters() {
+        mongooseConnect();
+        const weights = await ModelParamModel.findOne({ 'param': 'weights' }).exec();
+
+        return weights.data.length;
     }
 }

@@ -345,6 +345,22 @@ export default class SpotifyController {
         return points;
     }
 
+    /**
+     * Gets 5 songs from the provided cluster. Assumes cluster number correct. Songs are sampled randomly; may repeat.
+     * @param cluster number of the cluster.
+     * @returns 5 songs from the cluster
+     */
+    static async getSongsFromCluster(cluster: number): Promise<Song[]> {
+        mongooseConnect();
+
+        const songs = await SongModel.aggregate([
+            {$match: {cluster: cluster, preview_url: {$exists: true, $ne: null}}},
+            {$sample: {size: 5}}
+        ]).exec();
+
+        return songs;
+    }
+
 
 
 
