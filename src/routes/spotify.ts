@@ -29,16 +29,16 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
-router.get('/playlist/:id', async (req, res) => {
-    console.log('batch add songs');
-    const num = await SpotifyController.batchAddPlaylist(req.params.id);
+// router.get('/playlist/:id', async (req, res) => {
+//     console.log('batch add songs');
+//     const num = await SpotifyController.batchAddPlaylist(req.params.id);
 
-    if (num) {
-        res.send({ 'added': num });
-    } else {
-        res.status(404).json({ error: 'Playlist not found' });
-    }
-})
+//     if (num) {
+//         res.send({ 'added': num });
+//     } else {
+//         res.status(404).json({ error: 'Playlist not found' });
+//     }
+// })
 
 router.get('/nebula/previews', async (req, res) => {
     const axis1 = req.query.axis1;

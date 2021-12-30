@@ -1,12 +1,13 @@
 import express from "express";
-import serverless from "serverless-http";
 import ClusterRoute from './routes/cluster_radio';
 import SpotifyRoute from './routes/spotify';
-import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit'
 
-
-dotenv.config();
+// import dotenv from 'dotenv';
+// if (!process.env.SPOTIFY_CLIENT_ID) {
+//   // only config dotenv if hasnt been configured
+//   dotenv.config();
+// }
 
 const app = express();
 const PORT = 3001;
@@ -25,9 +26,9 @@ const radioLimiter = rateLimit({
   legacyHeaders: false
 });
 
- 
+
 app.get('/', async function (req, res) {
-    res.send('Hello World!');
+  res.send('Hello World!');
 })
 
 app.use('/spotify', nebulaLimiter);
@@ -36,9 +37,10 @@ app.use('/spotify', SpotifyRoute);
 app.use('/cluster_radio', radioLimiter);
 app.use('/cluster_radio', ClusterRoute);
 
-app.listen( PORT, () => {
+
+app.listen(PORT, () => {
   // tslint:disable-next-line:no-console
-  console.log( `server started at http://localhost:${ PORT }` );
-} );
- 
-module.exports.handler = serverless(app);
+  console.log(`server started at http://localhost:${PORT}`);
+});
+
+// module.exports.handler = serverless(app);
