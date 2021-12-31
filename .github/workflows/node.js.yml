@@ -27,6 +27,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - name: Make dotenv file
+      run: |
+        touch .env
+        echo ${{ secrets.DOTENV }} > .env
     - run: npm run build
     - name: Package Zip
       run: zip -r deploy.zip . -x *.git*
