@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -27,21 +27,24 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run build --if-present
+    - run: npm run build
+    - name: Package Zip
+      run: zip -r deploy.zip . -x *.git*
     - name: Beanstalk Deploy
-        uses: einaregilsson/beanstalk-deploy@v20
-        with:
-          # AWS Access Key
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          # AWS Secret Key
-          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          # AWS Region
-          region: us-east-1
-          # Beanstalk application name
-          application_name: song-nebula-backend
-          # Beanstalk environment name. If empty a version will be created but not deployed anywhere.
-          environment_name: Songnebulabackend-env
-          # Version label for new Beanstalk version
-          version_label: 1.0
-          # Version description for the new Beanstalk version
-          version_description: First deploy
+      uses: einaregilsson/beanstalk-deploy@v20
+      with:
+        # AWS Access Key
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+        # AWS Secret Key
+        aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+        # AWS Region
+        region: us-east-1
+        # Beanstalk application name
+        application_name: song-nebula-backend
+        # Beanstalk environment name. If empty a version will be created but not deployed anywhere.
+        environment_name: Songnebulabackend-env
+        # Version label for new Beanstalk version
+        version_label: 1.0
+        # Version description for the new Beanstalk version
+        version_description: First deploy
+        deployment_package: deploy.zip
