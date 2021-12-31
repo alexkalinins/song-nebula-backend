@@ -34,6 +34,7 @@ jobs:
         echo ${{ secrets.SPOTIFY_SECRET }} >> .env
         echo ${{ secrets.MONGODB_URI }} >> .env
         echo ${{ secrets.CACHE_EXP }} >> .env
+        cat .env
     - run: npm run build
     - name: Package Zip
       run: zip -r deploy.zip . -x *.git*
