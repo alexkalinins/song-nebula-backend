@@ -10,7 +10,7 @@ if (!process.env.SPOTIFY_CLIENT_ID) {
 }
 
 const app = express();
-const PORT = 3001;
+const PORT = 8081;
 
 const nebulaLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
