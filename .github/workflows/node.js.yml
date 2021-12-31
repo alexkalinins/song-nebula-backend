@@ -48,3 +48,4 @@ jobs:
         # Version description for the new Beanstalk version
         version_description: First deploy
         deployment_package: deploy.zip
+        use_existing_version_if_available: true
