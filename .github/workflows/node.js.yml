@@ -27,6 +27,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - name: multiline secret test
+      run: |
+        touch testfile.txt
+        echo ${{ secrets.TEST }} > testfile.txt
+        cat testfile.txt
+        rm testfile.txt
     - name: Make dotenv file
       run: |
         touch .env
