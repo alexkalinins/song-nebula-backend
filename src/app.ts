@@ -4,10 +4,7 @@ import SpotifyRoute from './routes/spotify';
 import rateLimit from 'express-rate-limit'
 
 import dotenv from 'dotenv';
-if (!process.env.SPOTIFY_CLIENT_ID) {
-  // only config dotenv if hasnt been configured
-  dotenv.config();
-}
+dotenv.config();
 
 const app = express();
 const PORT = 8080;
