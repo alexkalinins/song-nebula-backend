@@ -289,7 +289,7 @@ export default class SpotifyController {
                 return null;
             }
 
-            const ids = res.data.items.filter((item: { track: { id: any; }; }) => item != null && item.track != null).map((item: { track: { id: any; }; }) => item.track.id)
+            const ids = res.data.items.filter((item: { track: { id: string; }; }) => item != null && item.track != null).map((item: { track: { id: string; }; }) => item.track.id)
             if (!ids) break;
             count += ids.length;
             total = res.data.total;
