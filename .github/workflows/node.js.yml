@@ -28,13 +28,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - name: Make dotenv file
-      run: |
-        touch .env
-        echo ${{ secrets.SPOTIFY_CLIENT }} >> .env
-        echo ${{ secrets.SPOTIFY_SECRET }} >> .env
-        echo ${{ secrets.MONGODB_URI }} >> .env
-        echo ${{ secrets.CACHE_EXP }} >> .env
-        cat .env
+      run: echo ${{ secrets.ENCODED_DOTENV }} | base64 -d > .env
     - run: npm run build
     - name: Package Zip
       run: zip -r deploy.zip . -x *.git*
