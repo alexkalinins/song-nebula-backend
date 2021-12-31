@@ -48,7 +48,7 @@ jobs:
         # Beanstalk environment name. If empty a version will be created but not deployed anywhere.
         environment_name: Songnebulabackend-env
         # Version label for new Beanstalk version
-        version_label: 1.0.3
+        version_label: 1.0.4
         # Version description for the new Beanstalk version
         version_description: First deploy
         deployment_package: deploy.zip
