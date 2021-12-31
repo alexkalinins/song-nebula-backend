@@ -3,6 +3,7 @@ import ClusterRoute from './routes/cluster_radio';
 import SpotifyRoute from './routes/spotify';
 import rateLimit from 'express-rate-limit'
 
+// !uncomment if running locally
 // import dotenv from 'dotenv';
 // if (!process.env.SPOTIFY_CLIENT_ID) {
 //   // only config dotenv if hasnt been configured
