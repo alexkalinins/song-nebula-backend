@@ -2,8 +2,8 @@
   "name": "song-nebula-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "engines" : { "node" : ">=16.0" },
+  "main": "dist/app.js",
+  "engines" : { "node" : ">=14.0" },
   "scripts": {
     "clean": "rimraf dist/*",
     "copy-assets": "ts-node tools/copyAssets",
